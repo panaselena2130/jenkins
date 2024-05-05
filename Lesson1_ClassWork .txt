@@ -1,0 +1,112 @@
+*********************************************
+* Create an environment
+*********************************************
+1) Create a new VM(virtual machine) with name UbuntuJenkins (Linux 64-bit)
+RAM: 4096MB
+Storage: 20GB
+CPU: 4 
+Display Resolution: 128 MB
+Network type: Bridged Adapter
+Computer Name: jenkins-master
+Username: your name
+
+2) While VM Box is being installed download and install Putty
+ https://www.putty.org/ 
+ 
+3) Check VM IP by command $ ifconfig and configure Putty.
+
+4) If you don't manage to connect to VM via Putty perform
+the following
+$ sudo apt-get install openssh-server openssh-client
+
+***********************************************************
+* Install Jenkins
+*************************************************************
+1) Install Java:
+$ sudo apt install openjdk-8-jdk 
+Check your Java version 
+$ java –version
+
+2) Install Jenkins
+sudo snap install jenkins --classic
+
+Power Off your VM and then Power On 
+	Find your VM IP by command $ifconfig
+	Browse in Chrome http://<your_IP_address>:8080 
+	Example:  http://192.168.1.221:8080/
+
+3) Following the instructions find the initial Jenkins password.
+4) Install suggested plugins
+
+***********************************************************
+* Configure Jenkins and create the first job
+*************************************************************
+Create the admin user.
+• go to dashboard > new item > fill the name of your job > freestyle project > ok 
+• build > add build step > execute shell > write your command in the text box > save 
+
+To add parameters to the job:
+Configure > general > this project is parameterized > add parameter 
+• after you finish press save
+
+Job1:
+#!/bin/bash
+echo "Hello World!" > hello
+
+jOB2:
+#!/bin/bash
+echo "Hello $NAME" > TEST
+
+job3
+#!/bin/bash
+echo "Hello $NAME" >> TEST
+-------------------------------------------------
+create File example.py
+
+---------------------------------------------------------
+$ cd Documents
+$ mkdir scripts
+$ cd scripts/
+$ vi example.py
+
+
+#!/usr/bin/python
+
+import sys
+
+print 'Number of arguments:', len(sys.argv), 'arguments.'
+print 'Argument List:', str(sys.argv)
+ 
+ESC wq!
+
+$ chmod 777 example.py
+
+
+---------------------------------------
+#!/bin/bash
+
+echo "Input param: $NAME"
+echo "Input param: $NUMBER"
+
+/var/lib/jenkins/workspace/test/example.py $NAME $NUMBER
+
+____________________________________
+To add to the job Choice Parameter - PHONE_NUMBER
+
+#!/bin/bash
+
+echo "Input param: $NAME"
+echo "Input param: $NUMBER"
+echo "Input param: $PHONE_NUMBER"
+
+/var/lib/jenkins/workspace/test/example.py $NAME $NUMBER $PHONE_NUMBER
+
+Boolean parameter TEST
+#!/bin/bash 
+
+echo "Input param: $NAME"
+echo "Input param: $NUMBER"
+echo "Input param: $PHONE_NUMBER"
+echo "Input param: $TEST"
+
+/var/lib/jenkins/workspace/test/example.py $NAME $NUMBER $PHONE_NUMBER
