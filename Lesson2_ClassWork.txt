@@ -1,0 +1,95 @@
+*********************************************
+* Plugins Installation
+*********************************************
+1) Install SSH plugin
+2) Install Role-based Authorization Strategy plugin
+
+*********************************************
+* Jenkins Restart - 2 options
+*********************************************
+1) (jenkins_url)/safeRestart -Allows all running jobs to complete 
+2) (jenkins_url)/restart - Forces a restart without waiting for builds to complete
+
+***************************************************
+* Jenkins Security
+***************************************************
+1) Create 2 users: tester, developer. Password: 123456
+2) Go to dashboard > manage Jenkins > Configure Global Security • Find and select Role-Based Strategy
+3) Create 2 roles: view, developer and configure them according to the document.
+4) Add user test to role view. Logout and login with user tester. Check the requiered permissions. 
+5) Add user developer to role developer. Logout and login with user developer. Check the requiered permissions.
+
+***************************************************
+* Configuring master node
+***************************************************
+JENKINS_HOME=/var/snap/jenkins/2126
+SNAP_COMMON=/var/snap/jenkins/common
+LANGUAGE=en_IL:en
+FONTCONFIG_PATH=/snap/jenkins/2126/etc/fonts
+CI=true
+RUN_CHANGES_DISPLAY_URL=http://ubuntujenkins1:8080/job/test/6/display/redirect?page=changes
+LD_LIBRARY_PATH=/snap/jenkins/2126/usr/lib/x86_64-linux-gnu
+
+
+You need to create user jenkins on the master node. 
+$ sudo su 
+$ useradd -d /var/snap/jenkins/2126 jenkins
+$ chown jenkins:jenkins /var/snap/jenkins/2126
+$ chmod -R 777 /var/snap/jenkins/
+Create ssh keys on the new user 
+$ su jenkins 
+$ cd ~ 
+$ ssh-keygen 
+Copy a public key of master and keep it onside.
+$ cat /var/lib/jenkins/.ssh/id_rsa.pub
+Copy a private key of master and keep it onside.
+$ cat /var/lib/jenkins/.ssh/id_rsa
+***************************************************
+* Configuring a slave node
+***************************************************
+Create an ssh key-pair 
+$ cd ~ 
+$ ssh-keygen 
+$ touch ~/.ssh/authorized_keys
+Copy a content a public key of master into the slave by 
+$ vim ~/.ssh/authorized_keys 
+Login to the slave node from master without entering a password
+$ ssh <slave_username>@<slave_IP>
+
+***************************************************
+* Adding a slave to master in Jenkins
+***************************************************
+1) Create a new node with name "slave01"
+Update Remote root directory
+Labels: slave01
+Launch method: Launch agents via ssh
+Update the node by master private key.
+
+*****************************************
+* Create a new job with the slave
+*****************************************
+JOB_NAME: Test_Slave
+Input params:
+1) String param: NAME
+2)choise param: OS 
+Linux
+Windows
+MAC-OS
+
+--------------------------
+#!/bin/bash
+if [ -f "hello" ]; then
+	echo "File hello exists"
+else
+	echo "Hello World!" > hello
+fi
+echo "Input param: NAME=$NAME"
+echo "Input param: OS=$OS"
+echo "Hello $NAME" >> hello
+echo "$NAME is using $OS" >> hello
+------------------------------------
+Commands in VIM
+i - insert
+ESC: q! - exit
+ESC: wq! - write and exit
+
